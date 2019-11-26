@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-project(fake
+project(QtFakeProcess
   VERSION 0.0.1
   DESCRIPTION "Example usage of Broadcaster"
   LANGUAGES C CXX)
@@ -7,7 +7,7 @@ project(fake
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS_COMMON}")
-set(TARGET_NAME "fake")
+set(TARGET_NAME "QtFakeProcess")
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
