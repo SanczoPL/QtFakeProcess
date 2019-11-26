@@ -1,0 +1,8 @@
+{
+    "LogLevel": 0,
+    "Communication":{
+        "Port":12345,
+        "IP":"localhost",
+        "AllInfoTopic":"All:Info:Topic"
+    }
+}
