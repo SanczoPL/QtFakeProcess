@@ -23,6 +23,7 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(IncludeSpdlog REQUIRED)
 #include fix for OpenCV
 include_directories(
     ${OpenCV_INCLUDE_DIRS}
@@ -30,11 +31,9 @@ include_directories(
 
 set(SRC
   src/main.cc
-   ../IncludeSpdlog/spdlog.cc
 )
 
 set(HEADERS
-../IncludeSpdlog/spdlog.h
 )
 
 add_executable(${TARGET_NAME}
@@ -42,4 +41,4 @@ add_executable(${TARGET_NAME}
     ${HEADERS}
 )
 
-target_link_libraries(${PROJECT_NAME}  ${OpenCV_LIBS}   Qt5::Core Qt5::Network  Threads::Threads)
+target_link_libraries(${PROJECT_NAME} IncludeSpdlog ${OpenCV_LIBS}   Qt5::Core Qt5::Network  Threads::Threads)
