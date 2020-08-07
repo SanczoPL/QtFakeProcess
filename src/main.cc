@@ -1,4 +1,4 @@
-#include "../../IncludeSpdlog/spdlog.h"
+#include <spdlog.h>
 
 #include <QCoreApplication>
 #include <QFile>
@@ -7,6 +7,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTime>
+#include <iostream>
+
 
 #include <opencv2/opencv.hpp>
 #include "opencv2/highgui/highgui.hpp"
