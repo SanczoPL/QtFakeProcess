@@ -19,11 +19,23 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_PREFIX_PATH /home/gmatczak/opencv/build)
 configure_file(config.json ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} COPYONLY)
 
+if (WIN32)
+	set (CMAKE_PREFIX_PATH "C:\\repo\\OpenCV\\build")
+	list(APPEND CMAKE_PREFIX_PATH "C:\\repo\\vcpkg\\installed\\x64-windows")
+	list(APPEND CMAKE_PREFIX_PATH "D:\\Qt\\Qt5.12.8\\5.12.8\\msvc2017_64")
+	list(APPEND CMAKE_PREFIX_PATH "C:\\repo\\ConfigReader\\build-cmake")
+	list(APPEND CMAKE_PREFIX_PATH "C:\\repo\\ProcessingModules\\build")
+	list(APPEND CMAKE_PREFIX_PATH "C:\\repo\\QtCommunicatorPlugin\\build")
+	list(APPEND CMAKE_PREFIX_PATH "C:\\repo\\Broadcaster\\build")
+	
+	find_package(spdlog CONFIG REQUIRED)
+	find_package(ConfigReader REQUIRED)
+endif (WIN32)
+
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(IncludeSpdlog REQUIRED)
 #include fix for OpenCV
 include_directories(
     ${OpenCV_INCLUDE_DIRS}
@@ -41,4 +53,18 @@ add_executable(${TARGET_NAME}
     ${HEADERS}
 )
 
-target_link_libraries(${PROJECT_NAME} IncludeSpdlog ${OpenCV_LIBS}   Qt5::Core Qt5::Network  Threads::Threads)
+
+if (UNIX)
+	target_link_libraries(${PROJECT_NAME} spdlog::spdlog spdlog::spdlog_header_only)
+	target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${OPENGL_LIBRARIES} ${QT_LIBRARIES})
+	target_link_libraries(${PROJECT_NAME} Threads::Threads ConfigReader)
+	
+endif (UNIX)
+
+if (WIN32)
+	target_link_libraries(${PROJECT_NAME} spdlog::spdlog spdlog::spdlog_header_only)
+	target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${OPENGL_LIBRARIES} ${QT_LIBRARIES})
+	target_link_libraries(${PROJECT_NAME} Threads::Threads ConfigReader)
+endif (WIN32)
+
+

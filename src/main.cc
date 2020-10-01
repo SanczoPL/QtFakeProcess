@@ -1,4 +1,6 @@
-#include <spdlog.h>
+#include "configreader.h"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #include <QCoreApplication>
 #include <QFile>
@@ -13,6 +15,10 @@
 #include <opencv2/opencv.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+
+#ifdef Q_OS_WIN
+#include <windows.h> // for Sleep
+#endif
 
 using namespace std;
 
@@ -68,12 +74,12 @@ int main(int argc, char *argv[])
 {
   // QCoreApplication application(argc, argv);
   auto messageLevel{ 0 };
-  H_Logger->set_level(static_cast<spdlog::level::level_enum>(messageLevel));
-  H_Logger->set_pattern("[%Y-%m-%d] [%H:%M:%S.%e] [%t] [%^%l%$] %v");
-  H_Logger->debug("start main logger");
-  H_Logger->debug("./QtFakeProcess (time in [s]) (name of process)");
-  qint32 time = 1000;
-  QString name = "";
+  spdlog::set_level(static_cast<spdlog::level::level_enum>(messageLevel));
+  spdlog::set_pattern("[%Y-%m-%d] [%H:%M:%S.%e] [%t] [%^%l%$] %v");
+  spdlog::debug("start main logger");
+  spdlog::debug("./QtFakeProcess (time in [s]) (name of process)");
+  qint32 time = 20;
+  QString name = "none";
   if(argc > 1)
   {
     QString timeStr =  QString::fromStdString( argv[1]);
@@ -83,14 +89,21 @@ int main(int argc, char *argv[])
   {
     name =  QString::fromStdString( argv[2]);
   }
-
+  spdlog::debug("./QtFakeProcess ({}[s]) ({})", time, name.toStdString());
   QTime now{};
   now.start();
 
   for(qint32 i = 0 ; i < time ; i++)
   {
-    sleep(1);
-    H_Logger->info("Fake proces {} spam msg: :{}",name.toStdString().c_str(),i);
+    //sleep(1);
+#ifdef Q_OS_WIN
+      Sleep(uint(1000));
+#else
+      struct timespec ts = { 1 / 1000, (1 % 1000) * 1000 * 1000 };
+      nanosleep(&ts, NULL);
+#endif
+      
+    spdlog::debug("Fake proces {} spam msg: :{}",name.toStdString().c_str(),i);
   }
   
 
